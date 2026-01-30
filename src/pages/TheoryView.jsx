@@ -1,64 +1,39 @@
-import { useParams } from "react-router-dom";
-import { experimentsData } from "../data/experiments";
-import { useEffect, useState } from "react";
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { fetchTheory } from '../services/theory';
 
-export default function TheoryView() {
-  const { classId, slug } = useParams();
-  const numericClassId = Number(classId);
-
-  const experiment = experimentsData[numericClassId]?.find(
-    (e) => e.slug === slug
-  );
-
-  const [theory, setTheory] = useState(null);
+const TheoryView = () => {
+  const { classId, experimentId } = useParams();
+  const [theory, setTheory] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!experiment) return;
-
-    fetch("http://localhost:5000/api/theory", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        classId: numericClassId,
-        experiment: experiment.title,
-      }),
-    })
-      .then((res) => res.json())
+    fetchTheory(classId, experimentId.replace('-', ' '))
       .then((data) => {
-        setTheory(data.content);
+        setTheory(data);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
-  }, []);
-
-  if (!experiment) {
-    return <div className="p-8 text-white">Experiment not found</div>;
-  }
+      .catch(() => {
+        setTheory('Failed to load theory');
+        setLoading(false);
+      });
+  }, [classId, experimentId]);
 
   return (
-    <div className="p-4 text-white max-w-5xl mx-auto">
+    <div className="p-8 text-white max-w-4xl mx-auto">
+      <h1 className="text-3xl font-bold mb-4">
+        Class {classId} – {experimentId}
+      </h1>
 
-      <h1 className="text-3xl font-bold mb-8">{experiment.title}</h1>
-
-      {/* 🔥 IMAGES SECTION */}
-{experiment.images?.length > 0 && (
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-    {experiment.images.map((img, i) => (
-      <img
-        key={i}
-        src={img}
-        alt="experiment"
-        loading="lazy"
-        className="rounded-xl border border-slate-700 bg-slate-800"
-      />
-    ))}
-  </div>
-)}
-      {/* 🔥 THEORY CONTENT */}
-      <div className="bg-slate-900 rounded-xl p-4 shadow-lg whitespace-pre-line leading-relaxed">
-        {loading ? "Loading theory..." : theory}
-      </div>
+      {loading ? (
+        <p className="text-gray-400">Generating theory using AI...</p>
+      ) : (
+        <pre className="whitespace-pre-wrap bg-white/5 p-6 rounded-xl">
+          {theory}
+        </pre>
+      )}
     </div>
   );
-}
+};
+
+export default TheoryView;

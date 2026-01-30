@@ -9,7 +9,10 @@ const PORT = 5000;
 app.use(cors());
 app.use(express.json());
 
-console.log("API KEY loaded:", process.env.OPENAI_API_KEY ? "YES" : "NO");
+console.log(
+  "API KEY loaded:",
+  process.env.OPENAI_API_KEY ? "YES" : "NO"
+);
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -20,27 +23,20 @@ app.post("/api/chat", async (req, res) => {
   try {
     const { messages } = req.body;
 
-    if (!messages) {
-      return res.status(400).json({ error: "Messages missing" });
+    if (!messages || !Array.isArray(messages)) {
+      return res.status(400).json({ error: "Messages missing or invalid" });
     }
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are ChemVerse AI, a helpful chemistry tutor for class 9-12 students.",
-        },
-        ...messages,
-      ],
+      messages,
     });
 
     res.json({
       reply: completion.choices[0].message.content,
     });
   } catch (err) {
-    console.error("🔥 CHAT ERROR:", err);
+    console.error("🔥 CHAT ERROR:", err.message);
     res.status(500).json({ error: "Chat generation failed" });
   }
 });
@@ -74,17 +70,17 @@ NCERT level.
 No emojis.
 `;
 
-    const response = await openai.chat.completions.create({
+    const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [{ role: "user", content: prompt }],
       temperature: 0.4,
     });
 
     res.json({
-      content: response.choices[0].message.content,
+      content: completion.choices[0].message.content,
     });
   } catch (err) {
-    console.error("🔥 THEORY ERROR:", err);
+    console.error("🔥 THEORY ERROR:", err.message);
     res.status(500).json({ error: "Theory generation failed" });
   }
 });

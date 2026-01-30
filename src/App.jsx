@@ -5,6 +5,9 @@ import Home from "./pages/Home";
 import AIAssistant from "./pages/AIAssistant";
 import VirtualLab from "./pages/VirtualLab";
 import Practical from "./pages/Practical";
+import Theory from "./pages/Theory";
+import TheoryClass from "./pages/TheoryClass";
+import TheoryExperiment from "./pages/TheoryExperiment";
 
 function App() {
   return (
@@ -15,9 +18,15 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/ai" element={<AIAssistant />} />
         <Route path="/lab" element={<VirtualLab />} />
-
-        {/* PRACTICAL LAB */}
         <Route path="/lab/practical" element={<Practical />} />
+
+        {/* 🔥 THEORY FLOW */}
+        <Route path="/theory" element={<Theory />} />
+        <Route path="/theory/:classId" element={<TheoryClass />} />
+        <Route
+          path="/theory/:classId/:experimentSlug"
+          element={<TheoryExperiment />}
+        />
 
         <Route
           path="*"
