@@ -3,5 +3,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/Chemverse/',   // ⚠️ Repo name SAME hona chahiye
+  base: '/',   // ⚠️ Repo name SAME hona chahiye
 })
