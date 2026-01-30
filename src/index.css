@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  /* min-h-screen ko yahan @apply mein daal diya hai taaki error na aaye */
+  @apply bg-dark-900 text-white antialiased min-h-screen;
+  
+  background: radial-gradient(circle at top center, #1a2333 0%, #0a0f1c 100%);
+  overflow-x: hidden;
+}
+
+/* Glass Effect */
+.glass {
+  @apply bg-dark-800/60 backdrop-blur-lg border border-white/10 shadow-xl;
+}
+
+/* Neon Text Glow */
+.text-glow {
+  text-shadow: 0 0 10px rgba(0, 242, 234, 0.5);
+}

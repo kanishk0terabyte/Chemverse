@@ -1,0 +1,18 @@
+
+:root{
+  --primary-1: #22d3ee;
+  --primary-2: #6366f1;
+  --glass-bg: rgba(255,255,255,0.06);
+}
+
+/* .btn style */
+.btn {
+  background: linear-gradient(135deg, var(--primary-1), var(--primary-2));
+  color: #042a2b;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  box-shadow: 0 6px 20px rgba(8,15,50,0.35);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.btn:active { transform: translateY(1px) scale(.99); }
